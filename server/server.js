@@ -1,3 +1,9 @@
+/**
+ * 
+ * @author rsb
+ */
+'use strict';
+
 const app = require('express')();
 const http = require('http').Server(app);
 //const server = require('http').createServer(app);
