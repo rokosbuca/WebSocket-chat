@@ -7,12 +7,13 @@
 const redis = require('redis');
 const redisClient = redis.createClient();
 
-Promise.promisifyAll(require("redis"));
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
 
 const getClient = () => {
     return redisClient;
 }
 
 module.exports = {
-    redisClient
+    getClient
 }
