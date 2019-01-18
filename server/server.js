@@ -1,22 +1,19 @@
-const WebSocket = require('isomorphic-ws')
+const app = require('express')();
+const http = require('http').Server(app);
+//const server = require('http').createServer(app);
+//const io = require('socket.io')(server);
+const io = require('socket.io')(http);
 
-const ws = new WebSocket('wss://echo.websocket.org/', {
-  origin: 'https://localhost:3001'
+//io.on('connection', client => { console.log('client:', typeof(client), client); console.log('got a connection'); });
+//io.listen(3000);
+
+app.get('/', function(req, res){
+    res.sendFile(__dirname + '/index.html');
 });
 
-ws.onopen = function open() {
-  console.log('connected');
-  ws.send(Date.now());
-};
-
-ws.onclose = function close() {
-  console.log('disconnected');
-};
-
-ws.onmessage = function incoming(data) {
-  console.log(`Roundtrip time: ${Date.now() - data} ms`);
-
-  setTimeout(function timeout() {
-    ws.send(Date.now());
-  }, 500);
-};
+io.on('connection', function(socket){
+    console.log('a user connected');
+});
+  
+  
+http.listen(3001, () => { console.log('listening on port 3001'); });
