@@ -7,10 +7,10 @@
 // cluster client
 const clusterClient = require('./cluster-client').getClient();
 
-const connectChatroomUser = (chatroom, user) => {
+const newMessage = (user, message) => {
 
 }
 
 module.exports = {
-    connectChatroomUser
+    newMessage
 }
