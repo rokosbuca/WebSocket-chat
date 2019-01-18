@@ -1,0 +1,26 @@
+# server node modules
+/server/node_modules
+
+# webapp node modules
+/webapp/node_modules
+
+# default webapp ignores
+/webapp/.pnp
+/webapp/.pnp.js
+
+# testing
+/webapp/coverage
+
+# production
+/webapp/build
+
+# misc
+/webapp/.DS_Store
+/webapp/.env.local
+/webapp/.env.development.local
+/webapp/.env.test.local
+/webapp/.env.production.local
+
+/webapp/npm-debug.log*
+/webapp/yarn-debug.log*
+/webapp/yarn-error.log*
