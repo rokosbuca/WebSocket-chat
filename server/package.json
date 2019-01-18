@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/rokosbuca/WebSocket-chat/issues"
   },
-  "homepage": "https://github.com/rokosbuca/WebSocket-chat#readme"
+  "homepage": "https://github.com/rokosbuca/WebSocket-chat#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "http": "0.0.0",
+    "isomorphic-ws": "^4.0.1",
+    "socket.io": "^2.2.0",
+    "ws": "^6.1.2"
+  }
 }
