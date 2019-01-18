@@ -1,0 +1,19 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Server side code for the WebSocket chat app. Made as an excercise.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rokosbuca/WebSocket-chat.git"
+  },
+  "author": "Roko S. Buča",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rokosbuca/WebSocket-chat/issues"
+  },
+  "homepage": "https://github.com/rokosbuca/WebSocket-chat#readme"
+}
