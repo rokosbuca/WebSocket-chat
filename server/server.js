@@ -15,5 +15,23 @@ io.on('connection', function(socket){
     console.log('a user connected');
 });
   
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    socket.on('disconnect', () => {
+      console.log('user disconnected');
+    });
+});
+
+io.on('connection', (socket) => {
+    socket.on('chat message', (msg) => {
+        console.log('message: ' + msg);
+    });
+});
+
+io.on('connection', function(socket){
+    socket.on('chat message', function(msg){
+        io.emit('chat message', msg);
+    });
+});
   
 http.listen(3001, () => { console.log('listening on port 3001'); });
