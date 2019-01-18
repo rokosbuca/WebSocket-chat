@@ -4,12 +4,16 @@ const http = require('http').Server(app);
 //const io = require('socket.io')(server);
 const io = require('socket.io')(http);
 
+const controller = require('./controller/routes')(app, '/api');
+
 //io.on('connection', client => { console.log('client:', typeof(client), client); console.log('got a connection'); });
 //io.listen(3000);
 
+/*
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
 });
+*/
 
 io.on('connection', function(socket){
     console.log('a user connected');
