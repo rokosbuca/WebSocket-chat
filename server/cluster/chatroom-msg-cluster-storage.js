@@ -12,13 +12,13 @@ const chatroomInitMessage = (chatroom, timestamp, user, password) => {
     // 1) User 'username' created chatroom 'chatroom' on ['timestamp']
     // 2) User 'username' connected to chatroom 'chatroom' on ['timestamp']
 
-    const initMessage = 'User ' + user + ' created chatroom ' + chatroom + ' on [' + timestamp
-        + (password !== '' ? '] with password ' + password + ' as a private group': '] as a public group');
+    const initMessage = 'User "' + user + '" created chatroom "' + chatroom + '" on [' + timestamp
+        + (password !== '' ? '] with password "' + password + '" as a private group': '] as a public group');
     
     return new Promise((resolve, reject) => {
         clusterClient._rpush(chatroom, initMessage)
         .then(() => {
-            const adminConnectedMessage = 'User ' + user + ' connected to chatroom ' + chatroom + ' on ' + new Date().toLocaleString();
+            const adminConnectedMessage = 'User "' + user + '" connected to chatroom "' + chatroom + '" on ' + new Date().toLocaleString();
     
             clusterClient._rpush(chatroom, adminConnectedMessage)
             .then((listLenght) => {
