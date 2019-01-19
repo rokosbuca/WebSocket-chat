@@ -113,7 +113,7 @@ const getChatRoomInfo = (chatroomName) => {
 /**
  * Checks if chatroom with provided name already exists on redis.
  * 
- * @param {String} chatroom - Chatroom's name.
+ * @param {String} chatroomName - Chatroom's name.
  * 
  * @returns {boolean} True if chatroom with a provided name already exists, false otherwise.
  */
@@ -130,7 +130,7 @@ const chatroomExists = (chatroomName) => {
 /**
  * Checks if the chatroom with the same as provided chatroom name already exists.
  * 
- * @param {String} chatroom - Chatroom's name.
+ * @param {String} chatroomName - Chatroom's name.
  * 
  * @returns {boolean} True if chatroom with a provided name already exists, false otherwise.
  */
@@ -141,7 +141,7 @@ const isChatroomNameTaken = (chatroomName) => {
 /**
  * Checks if the provided password for entering the chatroom is correct.
  * 
- * @param {String} chatroom - Chatroom's name.
+ * @param {String} chatroomName - Chatroom's name.
  * @param {String} password - User provided password to be checked agains already saved password on redis.
  * 
  * @returns {boolean} True if the provided password is correct, false otherwise. Always true if chatroom 
@@ -167,8 +167,8 @@ const checkPassword = (chatroomName, password) => {
 /**
  * Checks if the user has admin privileges in a given chatroom.
  * 
- * @param {String} chatroom - Chatroom's name.
- * @param {String} user - User's username.
+ * @param {String} chatroomName - Chatroom's name.
+ * @param {String} username - User's username.
  * 
  * @returns {boolean} True if the user has admin privileges, false otherwise. 
  */
@@ -183,6 +183,7 @@ const isUserAdmin = (chatroomName, username) => {
         return chatroomInfo.split(';')[3] === username;
     })
 }
+
 
 module.exports = {
     createChatRoom,
