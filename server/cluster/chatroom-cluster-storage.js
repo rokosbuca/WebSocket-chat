@@ -96,7 +96,7 @@ const getChatRoomInfo = (chatroomName) => {
 
     clusterClient._hget(map, chatroomName)
     .then((chatroomInfo) => {
-        const chatroomSnippets = chatroomInfo;
+        const chatroomSnippets = chatroomInfo.split(';');
 
         chatroom.name = chatroomSnippets.name;
         chatroom.password = (chatroomSnippets.password ? chatroomSnippets.password : "");
@@ -148,8 +148,20 @@ const isChatroomNameTaken = (chatroomName) => {
  *      with the provided name doesn't have a password. Always false if the chatroom with the provided 
  *      name doesn't exist.
  */
-const checkPassword = (chatroom, password) => {
+const checkPassword = (chatroomName, password) => {
+    clusterClient._hget(map, chatroomName)
+    .then((chatroomInfo) => {
+        if (!chatroomInfo) {
+            // chatroom not found, always return false in that case
+            return false;
+        }
 
+        if (chatroomInfo.split(';')[1] === "") {
+            // password not defined, always return true in that case
+        }
+
+        return chatroomInfo.split(';')[1] === password;
+    })
 }
 
 /**
