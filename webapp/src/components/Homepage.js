@@ -13,7 +13,7 @@ class Homepage extends Component {
     }
 
     componentDidMount = () => {
-        axios.get('http://localhost:3001/api/rooms')
+        axios.get('http://localhost:3001/api/chatrooms')
         .then((res) => {
             this.setState({ chatRoomList: res.data.chatrooms });
         })

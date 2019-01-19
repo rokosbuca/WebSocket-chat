@@ -1,3 +1,6 @@
+# saved redis database
+/server/dump.rdb
+
 # server node modules
 /server/node_modules
 

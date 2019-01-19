@@ -8,7 +8,7 @@
 const router = require('express').Router();
 
 // mapping
-const mapping = '/rooms';
+const mapping = '/chatrooms';
 
 // cluster storage
 const chatroomStorage = require('../cluster/chatroom-cluster-storage');
@@ -18,19 +18,29 @@ const getChatRoomList = (req, res) => {
     // "chatroomName;nUsers;nMessages;chatroomAge;hasPassword;adminUsername"
     // sort list by chatroom's age
 
+    const data = [];
 
-    
-    return res.status(200).json({
-        'message': 'GET ' + mapping,
-        'req.query': req.query,
-        'req.params': req.params,
-        'req.body': req.body,
-        'chatrooms': [
-            'chatroom 1',
-            'ChatRoom 2',
-            'Chat room 3',
-            'Chat Room 4'
-        ]
+    chatroomStorage.getChatRooms()
+    .then((chatrooms) => {
+        /**
+         * chatroom = {
+         *      name
+         *      password
+         *      createdAt
+         *      createdBy
+         * }
+         */
+        chatrooms.forEach((chatroom) => {
+            data.push(
+                chatroom.name + ';' + chatroom.password + ';' + chatroom.createdAt + ';' + chatroom.createdBy
+            );
+        });
+
+        return res.status(200).json({ 'chatrooms': data });
+    })
+    .catch((error) => {
+        console.log('Error while accessing GET api/chatrooms. Error message:', error);
+        return res.status(500).send('Unexpected server error while fetching chatrooms.');
     });
 }
 
