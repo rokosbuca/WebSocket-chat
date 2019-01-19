@@ -38,7 +38,8 @@ const map = 'chatrooms:info';
  * @returns {String} Forwards the result of the redis client's hset method
  */
 const createChatRoom = (chatroomName, chatroomPassword, createdAtTime, createdByUser) => {
-    
+    const chatroomInfo = chatroomName + ';' + chatroomPassword + ';' + createdAtTime + ';' + createdByUser;
+    clusterClient._hset(map, chatroomName, chatroomInfo);
 }
 
 /**
