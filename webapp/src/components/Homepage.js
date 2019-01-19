@@ -4,13 +4,6 @@ import axios from 'axios';
 
 import ChatRoomInfo from './ChatRoomInfo';
 
-const data = [
-    'chatroom 1',
-    'ChatRoom 2',
-    'Chat room 3',
-    'Chat Room 4'
-]
-
 class Homepage extends Component {
     constructor(props) {
         super(props);
@@ -22,7 +15,7 @@ class Homepage extends Component {
     componentDidMount = () => {
         axios.get('http://localhost:3001/api/rooms')
         .then((res) => {
-            console.log('res:', res);
+            this.setState({ chatRoomList: res.data.chatrooms });
         })
         .catch((responseObject) => {
             console.log('Caught an error - responseObject:', responseObject);
@@ -37,11 +30,10 @@ class Homepage extends Component {
                 <h3>List of ChatRooms:</h3>
                 <List
                 size="default"
-                    header={<div>Header</div>}
-                    footer={<div>Footer</div>}
+                    header={ <div>Header</div> }
                     bordered
-                    dataSource={data}
-                    renderItem={item => (<List.Item>{item}</List.Item>)}
+                    dataSource={ this.state.chatRoomList }
+                    renderItem={ item => (<List.Item>{item}</List.Item>) }
                 />
             </div>
         );

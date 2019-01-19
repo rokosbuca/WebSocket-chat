@@ -18,7 +18,13 @@ const getChatRoomList = (req, res) => {
         'message': 'GET ' + mapping,
         'req.query': req.query,
         'req.params': req.params,
-        'req.body': req.body
+        'req.body': req.body,
+        'chatrooms': [
+            'chatroom 1',
+            'ChatRoom 2',
+            'Chat room 3',
+            'Chat Room 4'
+        ]
     });
 }
 

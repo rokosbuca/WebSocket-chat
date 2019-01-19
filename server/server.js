@@ -11,6 +11,7 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
 // init controller
+// first, enable access from webapp
 const apiControllerPath = '/api';
 const allowCrossDomain = (req, res, next) => {
     res.header('Access-Control-Allow-Origin', "*");
@@ -19,6 +20,7 @@ const allowCrossDomain = (req, res, next) => {
     next();
 };
 app.use(apiControllerPath, allowCrossDomain);
+// link controller
 const apiController = require('./controller/routes')(apiControllerPath, app);
 
 //io.on('connection', client => { console.log('client:', typeof(client), client); console.log('got a connection'); });
