@@ -20,12 +20,23 @@ class Homepage extends Component {
         this.getChatrooms();
     }
 
+    parseChatroomList = (chatrooms) => {
+        const chatroomList = [];
+
+        chatrooms.forEach((chatroom) => {
+            const chatroomString = chatroom.chatroom + ';' + chatroom.password + ';' + chatroom.createdAt + ';' + chatroom.createdBy;
+            chatroomList.push(chatroomString);
+        });
+
+        return chatroomList;
+    }
+
     getChatrooms = () => {
         axios.get(urlChatrooms)
         .then((res) => {
             this.setState({
                 loading: false,
-                chatroomList: res.data.chatrooms
+                chatroomList: this.parseChatroomList(res.data.chatrooms)
             });
         })
         .catch((responseObject) => {

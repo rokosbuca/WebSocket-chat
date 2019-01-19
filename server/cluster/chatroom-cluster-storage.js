@@ -77,7 +77,7 @@ const getChatRooms = () => {
                     const chatroom = {};
                     const chatroomSnippets = chatroomInfo.split(';');
     
-                    chatroom.name = chatroomSnippets[0];
+                    chatroom.chatroom = chatroomSnippets[0];
                     chatroom.password = (chatroomSnippets[1] ? chatroomSnippets[1] : "");
                     chatroom.createdAt = chatroomSnippets[2];
                     chatroom.createdBy = chatroomSnippets[3];
@@ -112,10 +112,10 @@ const getChatRoomInfo = (chatroomName) => {
         .then((chatroomInfo) => {
             const chatroomSnippets = chatroomInfo.split(';');
     
-            chatroom.name = chatroomSnippets.name;
-            chatroom.password = (chatroomSnippets.password ? chatroomSnippets.password : "");
-            chatroom.createdAt = chatroomSnippets.createdAt;
-            chatroom.createdBy = chatroomSnippets.createdBy;
+            chatroom.chatroom = chatroomSnippets[0];
+            chatroom.password = (chatroomSnippets[1] ? chatroomSnippets[1] : "");
+            chatroom.createdAt = chatroomSnippets[2];
+            chatroom.createdBy = chatroomSnippets[3];
     
             resolve(chatroom);
         })
