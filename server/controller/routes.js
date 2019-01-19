@@ -7,7 +7,7 @@
 // controllers
 const chatroomController = require('./chatroom-controller');
 
-module.exports = (app, path) => {
+module.exports = (path, app) => {
     
     app.use(path, chatroomController.router);
 

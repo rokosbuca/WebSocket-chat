@@ -10,7 +10,16 @@ const http = require('http').Server(app);
 //const io = require('socket.io')(server);
 const io = require('socket.io')(http);
 
-const controller = require('./controller/routes')(app, '/api');
+// init controller
+const apiControllerPath = '/api';
+const allowCrossDomain = (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', "*");
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+};
+app.use(apiControllerPath, allowCrossDomain);
+const apiController = require('./controller/routes')(apiControllerPath, app);
 
 //io.on('connection', client => { console.log('client:', typeof(client), client); console.log('got a connection'); });
 //io.listen(3000);
