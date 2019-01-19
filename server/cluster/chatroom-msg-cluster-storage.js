@@ -7,12 +7,13 @@
 // cluster client
 const clusterClient = require('./cluster-client').getClient();
 
-const chatroomInitMessage = (chatroom, timestamp, user) => {
+const chatroomInitMessage = (chatroom, timestamp, user, password) => {
     // add two messages when a chatroom is first created
-    // 1) User 'username' created chatroom 'chatroom' on 'timestamp'
-    // 2) User 'username' connected to chatroom 'chatroom' on 'timestamp'
+    // 1) User 'username' created chatroom 'chatroom' on ['timestamp']
+    // 2) User 'username' connected to chatroom 'chatroom' on ['timestamp']
 
-    const initMessage = 'User ' + user + ' created chatroom ' + chatroom + ' on ' + timestamp;
+    const initMessage = 'User ' + user + ' created chatroom ' + chatroom + ' on [' + timestamp
+        + (password !== '' ? '] with password ' + password + ' as a private group': '] as a public group');
     
     return new Promise((resolve, reject) => {
         clusterClient._rpush(chatroom, initMessage)

@@ -48,7 +48,7 @@ class ChatroomCreate extends Component {
 
             console.log('creating chatroom...');
             console.log('\tchatroom:', this.state.chatroom);
-            console.log('\tpassword:', (this.state.password ? this.state.password : '"empty password"'));
+            console.log('\tpassword:', (this.state.password !== '' ? this.state.password : '"empty password"'));
             console.log('\tuser:', this.state.user);
             const newChatroom = {
                 chatroom: {
