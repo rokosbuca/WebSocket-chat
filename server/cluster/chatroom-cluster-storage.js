@@ -72,14 +72,15 @@ const getChatRooms = () => {
     
             Promise.all(getPromises)
             .then((chatroomInfos) => {
+                console.log(chatroomInfos);
                 chatroomInfos.forEach((chatroomInfo) => {
                     const chatroom = {};
                     const chatroomSnippets = chatroomInfo.split(';');
     
-                    chatroom.name = chatroomSnippets.name;
-                    chatroom.password = (chatroomSnippets.password ? chatroomSnippets.password : "");
-                    chatroom.createdAt = chatroomSnippets.createdAt;
-                    chatroom.createdBy = chatroomSnippets.createdBy;
+                    chatroom.name = chatroomSnippets[0];
+                    chatroom.password = (chatroomSnippets[1] ? chatroomSnippets[1] : "");
+                    chatroom.createdAt = chatroomSnippets[2];
+                    chatroom.createdBy = chatroomSnippets[3];
     
                     chatrooms.push(chatroom);
                 });
