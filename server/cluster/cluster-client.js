@@ -156,6 +156,60 @@ const _hexists = (map, field) => {
     });
 }
 
+const _llen = (key) => {
+    if (!key) {
+        console.log('llen: Provide key. key=' + key);
+        return null;
+    }
+
+    return new Promise((resolve, reject) => {
+        redisClient.llenAsync(key)
+        .then((listLength) => {
+            resolve(listLength);
+        })
+        .catch((error) => {
+            console.log('Error while invoking redis client\'s \'llen\' method. Error message:', error);
+            reject(error);
+        });
+    });
+}
+
+const _rpush = (key, value) => {
+    if (!key || !value) {
+        console.log('rpush: Provide key and value. key=' + key + ' value=' + value);
+        return null;
+    }
+
+    return new Promise((resolve, reject) => {
+        redisClient.rpushAsync(key, value)
+        .then((listLength) => {
+            resolve(listLength);
+        })
+        .catch((error) => {
+            console.log('Error while invoking redis client\'s \'rpush\' method. Error message:', error);
+            reject(error);
+        });
+    });
+}
+
+const _lrange = (key, start, stop) => {
+    if (!key || !(typeof(start) === typeof(0)) || !(typeof(stop) === typeof(0))) {
+        console.log('lrange: Provide key, start and stop. key=' + key + ' start=' + start + ' stop=' + stop);
+        return null;
+    }
+
+    return new Promise((resolve, reject) => {
+        redisClient.lrangeAsync(key, start, stop)
+        .then((list) => {
+            resolve(list);
+        })
+        .catch((error) => {
+            console.log('Error while invoking redis client\'s \'lrange\' method. Error message:', error);
+            reject(error);
+        });
+    });
+}
+
 // add newly created methods to redisClient
 // helloworld
 redisClient.helloworld = helloworld;
@@ -167,6 +221,10 @@ redisClient._hgetall = _hgetall;
 redisClient._hdel = _hdel;
 redisClient._hdelall = _hdelall;
 redisClient._hexists = _hexists;
+// _llen, _rpush, _lrange
+redisClient._llen = _llen;
+redisClient._rpush = _rpush;
+redisClient._lrange = _lrange;
 
 
 module.exports = {
