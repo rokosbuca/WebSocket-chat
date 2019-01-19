@@ -134,16 +134,39 @@ const _hdelall = (map) => {
     });
 }
 
+const _hexists = (map, field) => {
+    if (!map || !field) {
+        console.log('hexists: Provide map and field. map=' + map + ' field=' + field);
+        return null;
+    }
+
+    return new Promise((resolve, reject) => {
+        redisClient.hexistsAsync(map, field)
+        .then((exists) => {
+            if (Integer.parseString(exists) === 1) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        })
+        .catch((error) => {
+            console.log('Error while invoking redis client\'s \'hexists\' method. Error message:', error);
+            reject(error);
+        });
+    });
+}
+
 // add newly created methods to redisClient
 // helloworld
 redisClient.helloworld = helloworld;
-// _hkeys, _hset, _hget, _hgetall, _hdel, _hdelall
+// _hkeys, _hset, _hget, _hgetall, _hdel, _hdelall, _hexists
 redisClient._hkeys = _hkeys;
 redisClient._hset = _hset;
 redisClient._hget = _hget;
 redisClient._hgetall = _hgetall;
 redisClient._hdel = _hdel;
 redisClient._hdelall = _hdelall;
+redisClient._hexists = _hexists;
 
 module.exports = {
     getClient
