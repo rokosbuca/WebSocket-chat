@@ -1,17 +1,37 @@
 import React, { Component } from 'react';
 
 import MyButton from '../MyButton';
+import { Button } from 'antd';
 
-class ChatRoom extends Component {
+class Chatroom extends Component {
     constructor(props) {
         super(props);
-        this.state = {  }
+        this.state = {
+            created: false
+        }
     }
-    render() { 
+
+    renderCreatingNewChatroom = () => {
         return (
-            <MyButton />
+            <Button onClick={ () => { this.setState({ created: true }); } }>
+                Create
+            </Button>
+        );
+    }
+
+    renderChatroom = () => {
+        return (
+            <div>chatroom</div>
+        );
+    }
+
+    render() { 
+        return ( this.state.created ?
+            this.renderCreatingNewChatroom()
+            :
+            this.renderChatroom()
         );
     }
 }
 
-export default ChatRoom;
+export default Chatroom;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class ChatRoomInfo extends Component {
+class ChatroomInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {  }
@@ -12,4 +12,4 @@ class ChatRoomInfo extends Component {
     }
 }
  
-export default ChatRoomInfo;
+export default ChatroomInfo;

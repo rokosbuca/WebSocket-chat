@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, List } from 'antd';
 import axios from 'axios';
 
-import ChatRoomInfo from './ChatRoomInfo';
+import ChatRoomInfo from './ChatroomInfo';
 
 const urlChatRooms = 'http://localhost:3001/api/chatrooms';
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class ChatRoomCreate extends Component {
+class ChatroomCreate extends Component {
     constructor(props) {
         super(props);
         this.state = {  }
@@ -16,4 +16,4 @@ class ChatRoomCreate extends Component {
     }
 }
  
-export default ChatRoomCreate;
+export default ChatroomCreate;
