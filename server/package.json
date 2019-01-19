@@ -4,6 +4,7 @@
   "description": "Server side code for the WebSocket chat app. Made as an excercise.",
   "main": "index.js",
   "scripts": {
+    "start": "start cmd /k C:/Users/Roko/Desktop/Redis-x64-3.2.100/redis-server.exe && start C:/Users/Roko/Desktop/Redis-x64-3.2.100/redis-cli.exe && nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
