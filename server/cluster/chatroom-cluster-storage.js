@@ -39,7 +39,16 @@ const map = 'chatrooms:info';
  */
 const createChatRoom = (chatroomName, chatroomPassword, createdAtTime, createdByUser) => {
     const chatroomInfo = chatroomName + ';' + chatroomPassword + ';' + createdAtTime + ';' + createdByUser;
-    clusterClient._hset(map, chatroomName, chatroomInfo);
+
+    return new Promise((resolve, reject) => {
+        clusterClient._hset(map, chatroomName, chatroomInfo)
+        .then((result) => {
+            resolve(result);
+        })
+        .catch((error) => {
+            reject(error);
+        })
+    })
 }
 
 /**
@@ -50,38 +59,40 @@ const createChatRoom = (chatroomName, chatroomPassword, createdAtTime, createdBy
 const getChatRooms = () => {
     const chatrooms = [];
 
-    clusterClient._hkeys(map)
-    .then((chatroomNames) => {
-        const getPromises = [];
-
-        chatroomNames.forEach((chatroomName) => {
-            getPromises.push(
-                clusterClient._hget(map, chatroomName)
-            );
-        });
-
-        Promise.all(getPromises)
-        .then((chatroomInfos) => {
-            chatroomInfos.forEach((chatroomInfo) => {
-                const chatroom = {};
-                const chatroomSnippets = chatroomInfo.split(';');
-
-                chatroom.name = chatroomSnippets.name;
-                chatroom.password = (chatroomSnippets.password ? chatroomSnippets.password : "");
-                chatroom.createdAt = chatroomSnippets.createdAt;
-                chatroom.createdBy = chatroomSnippets.createdBy;
-
-                chatrooms.push(chatroom);
+    return new Promise((resolve, reject) => {
+        clusterClient._hkeys(map)
+        .then((chatroomNames) => {
+            const getPromises = [];
+    
+            chatroomNames.forEach((chatroomName) => {
+                getPromises.push(
+                    clusterClient._hget(map, chatroomName)
+                );
             });
-
-            return chatrooms;
+    
+            Promise.all(getPromises)
+            .then((chatroomInfos) => {
+                chatroomInfos.forEach((chatroomInfo) => {
+                    const chatroom = {};
+                    const chatroomSnippets = chatroomInfo.split(';');
+    
+                    chatroom.name = chatroomSnippets.name;
+                    chatroom.password = (chatroomSnippets.password ? chatroomSnippets.password : "");
+                    chatroom.createdAt = chatroomSnippets.createdAt;
+                    chatroom.createdBy = chatroomSnippets.createdBy;
+    
+                    chatrooms.push(chatroom);
+                });
+    
+                resolve(chatrooms);
+            })
+            .catch((error) => {
+                reject(error);
+            });
         })
         .catch((error) => {
-            throw error;
+            reject(error);
         });
-    })
-    .catch((error) => {
-        throw error;
     });
 }
 
@@ -95,19 +106,21 @@ const getChatRooms = () => {
 const getChatRoomInfo = (chatroomName) => {
     const chatroom = {};
 
-    clusterClient._hget(map, chatroomName)
-    .then((chatroomInfo) => {
-        const chatroomSnippets = chatroomInfo.split(';');
-
-        chatroom.name = chatroomSnippets.name;
-        chatroom.password = (chatroomSnippets.password ? chatroomSnippets.password : "");
-        chatroom.createdAt = chatroomSnippets.createdAt;
-        chatroom.createdBy = chatroomSnippets.createdBy;
-
-        return chatroom;
-    })
-    .catch((error) => {
-        throw error;
+    return new Promise((resolve, reject) => {
+        clusterClient._hget(map, chatroomName)
+        .then((chatroomInfo) => {
+            const chatroomSnippets = chatroomInfo.split(';');
+    
+            chatroom.name = chatroomSnippets.name;
+            chatroom.password = (chatroomSnippets.password ? chatroomSnippets.password : "");
+            chatroom.createdAt = chatroomSnippets.createdAt;
+            chatroom.createdBy = chatroomSnippets.createdBy;
+    
+            resolve(chatroom);
+        })
+        .catch((error) => {
+            reject(error);
+        });
     });
 }
 
@@ -119,12 +132,14 @@ const getChatRoomInfo = (chatroomName) => {
  * @returns {boolean} True if chatroom with a provided name already exists, false otherwise.
  */
 const chatroomExists = (chatroomName) => {
-    clusterClient._hexists(map, chatroomName)
-    .then((exists) => {
-        return exists;
-    })
-    .catch((error) => {
-        throw error;
+    return new Promise((resolve, reject) => {
+        clusterClient._hexists(map, chatroomName)
+        .then((exists) => {
+            resolve(exists);
+        })
+        .catch((error) => {
+            reject(error);
+        });
     });
 }
 
@@ -150,19 +165,25 @@ const isChatroomNameTaken = (chatroomName) => {
  *      name doesn't exist.
  */
 const checkPassword = (chatroomName, password) => {
-    clusterClient._hget(map, chatroomName)
-    .then((chatroomInfo) => {
-        if (!chatroomInfo) {
-            // chatroom not found, always return false in that case
-            return false;
-        }
+    return new Promise((resolve, reject) => {
+        clusterClient._hget(map, chatroomName)
+        .then((chatroomInfo) => {
+            if (!chatroomInfo) {
+                // chatroom not found, always return false in that case
+                resolve(false);
+            }
 
-        if (chatroomInfo.split(';')[1] === "") {
-            // password not defined, always return true in that case
-        }
+            if (chatroomInfo.split(';')[1] === "") {
+                // password not defined, always return true in that case
+                resolve(true);
+            }
 
-        return chatroomInfo.split(';')[1] === password;
-    })
+            resolve(chatroomInfo.split(';')[1] === password);
+        })
+        .catch((error) => {
+            reject(error);
+        })
+    });
 }
 
 /**
@@ -174,15 +195,20 @@ const checkPassword = (chatroomName, password) => {
  * @returns {boolean} True if the user has admin privileges, false otherwise. 
  */
 const isUserAdmin = (chatroomName, username) => {
-    clusterClient._hget(map, chatroomName)
-    .then((chatroomInfo) => {
-        if (!chatroomInfo) {
-            // chatroom not found, always return false in that case
-            return false;
-        }
+    return new Promise((resolve, reject) => {
+        clusterClient._hget(map, chatroomName)
+        .then((chatroomInfo) => {
+            if (!chatroomInfo) {
+                // chatroom not found, always return false in that case
+                resolve(false);
+            }
 
-        return chatroomInfo.split(';')[3] === username;
-    })
+            resolve(chatroomInfo.split(';')[3] === username);
+        })
+        .catch((error) => {
+            reject(error);
+        });
+    });
 }
 
 
