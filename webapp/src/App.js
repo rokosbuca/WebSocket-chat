@@ -3,7 +3,6 @@ import { Switch, Route } from 'react-router-dom'
 
 import Homepage from './components/Homepage';
 import Chatroom from './components/Chatroom';
-import ChatroomJoin from './components/ChatroomJoin';
 import ChatroomCreate from './components/ChatroomCreate';
 
 class App extends Component {
@@ -11,9 +10,8 @@ class App extends Component {
         return (
             <Switch>
                 <Route exact path='/' component={ Homepage } />
-                <Route path='/join' component={ ChatroomJoin } />
-                <Route path='/new' component={ ChatroomCreate } />
-                <Route path='/room/:roomId' component={ Chatroom } />
+                <Route exact path='/new' component={ ChatroomCreate } />
+                <Route path='/chatroom/:chatroomId' component={ Chatroom } />
             </Switch>
         );
     }

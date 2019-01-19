@@ -50,6 +50,7 @@ const createNewChatroom = (req, res) => {
     const createdAt = req.body.chatroom.createdAt;
     const createdBy = req.body.chatroom.createdBy;
 
+    console.log(chatroom, password, createdAt, createdBy);
     chatroomStorage.createChatRoom(chatroom, password, createdAt, createdBy)
     .then(() => {
         return res.status(200).json({

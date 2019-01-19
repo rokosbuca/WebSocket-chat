@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import ChatRoomInfo from './ChatroomInfo';
 
-const urlChatRooms = 'http://localhost:3001/api/chatrooms';
+const urlChatrooms = 'http://localhost:3001/api/chatrooms';
 
 class Homepage extends Component {
     constructor(props) {
@@ -21,7 +21,7 @@ class Homepage extends Component {
     }
 
     getChatrooms = () => {
-        axios.get(urlChatRooms)
+        axios.get(urlChatrooms)
         .then((res) => {
             this.setState({
                 loading: false,
@@ -44,7 +44,7 @@ class Homepage extends Component {
             createdAt: "21:07:13",
             createdBy: "mega admin"
         }
-        axios.post(urlChatRooms, { chatroom })
+        axios.post(urlChatrooms, { chatroom })
         .then((res) => {
             console.log(res);
             this.addChatroomToList('new chatroom'/*res.data.chatroom.chatroom*/);

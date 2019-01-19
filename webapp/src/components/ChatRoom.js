@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import MyButton from '../MyButton';
 import { Button } from 'antd';
 
 class Chatroom extends Component {
