@@ -11,7 +11,7 @@ class App extends Component {
             <Switch>
                 <Route exact path='/' component={ Homepage } />
                 <Route exact path='/new' component={ ChatroomCreate } />
-                <Route path='/chatroom/:chatroomId' component={ Chatroom } />
+                <Route path='/chatrooms/:chatroom' component={ Chatroom } />
             </Switch>
         );
     }

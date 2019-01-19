@@ -8,66 +8,35 @@
 const router = require('express').Router();
 
 // mapping
-const mapping = '/chatrooms';
+const mapping = '/chatrooms/:chatroomId';
 
 // cluster storage
 const chatroomStorage = require('../cluster/chatroom-cluster-storage');
 
-const getChatRoomList = (req, res) => {
-    const chatroomList = [];
-
-    chatroomStorage.getChatRooms()
-    .then((chatrooms) => {
-        /**
-         * chatroom = {
-         *      chatroom
-         *      password
-         *      createdAt
-         *      createdBy
-         * }
-         */
-        chatrooms.forEach((chatroom) => {
-            chatroomList.push(chatroom);
-        });
-
-        return res.status(200).json({ 'chatrooms': chatroomList });
+const getChatroomInfo = (req, res) => {
+    // get chatroom info
+    chatroomStorage.getChatRoomInfo(req.params.chatroomId)
+    .then((chatroomInfo) => {
+        return res.status(200).json({ chatroom: chatroomInfo });
     })
     .catch((error) => {
-        console.log('Error while accessing GET api/chatrooms. Error message:', error);
-        return res.status(500).send('Unexpected server error while fetching chatrooms.');
-    });
+        console.log('Error while accessing GET api/chatrooms/:chatroomId endpoint. Error message:', error);
+        return res.status(500).send('Unxpected server error while fetching info for chatroom ' + req.params.chatroomId);
+    })
+
 }
 
-const createNewChatroom = (req, res) => {
-    const chatroom = req.body.chatroom.chatroom;
-    const password = req.body.chatroom.password;
-    const createdAt = req.body.chatroom.createdAt;
-    const createdBy = req.body.chatroom.createdBy;
-
-    console.log(chatroom, password, createdAt, createdBy);
-    chatroomStorage.createChatRoom(chatroom, password, createdAt, createdBy)
-    .then(() => {
-        return res.status(200).json({
-            'chatroom': {
-                'chatroom': chatroom,
-                'password': password,
-                'createdAt': createdAt,
-                'createdBy': createdBy
-            }
-        });
-    })
-    .catch((error) => {
-        console.log('Error while accessing POST api/chatrooms. Error message:', error);
-        return res.status(500).send('Unexpected server error while creating chatroom ' + chatroom + '.');
-    })
+const exitChatroom = (req, res) => {
+    // exit chatroom
+    // delete chatroom if the admin is the one to exit
 }
 
 router.get(mapping,
-    getChatRoomList
+    getChatroomInfo
 );
 
-router.post(mapping,
-    createNewChatroom
+router.delete(mapping,
+    exitChatroom
 );
 
 

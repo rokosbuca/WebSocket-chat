@@ -72,7 +72,6 @@ const getChatRooms = () => {
     
             Promise.all(getPromises)
             .then((chatroomInfos) => {
-                console.log(chatroomInfos);
                 chatroomInfos.forEach((chatroomInfo) => {
                     const chatroom = {};
                     const chatroomSnippets = chatroomInfo.split(';');

@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { Input, Button } from 'antd';
 import axios from 'axios';
 
-const urlChatRooms = 'http://localhost:3001/api/chatrooms';
+const urlChatrooms = 'http://localhost:3001/api/chatrooms';
 
 class ChatroomCreate extends Component {
     constructor(props) {
@@ -30,7 +30,7 @@ class ChatroomCreate extends Component {
         }
 
         // check if chatroom name is unique
-        axios.get(urlChatRooms)
+        axios.get(urlChatrooms)
         .then((res) => {
             const chatrooms = res.data.chatrooms;
 
@@ -58,7 +58,7 @@ class ChatroomCreate extends Component {
                     createdBy: this.state.user
                 }
             }
-            axios.post(urlChatRooms, newChatroom)
+            axios.post(urlChatrooms, newChatroom)
             .then((res) => {
                 const linkChatroom = '/chatrooms/' + res.data.chatroom.chatroom;
                 this.setState({

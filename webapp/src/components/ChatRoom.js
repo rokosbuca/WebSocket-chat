@@ -1,34 +1,36 @@
-import React, { Component } from 'react';
+/**
+ * 
+ * @author rsb
+ */
 
-import { Button } from 'antd';
+import React, { Component } from 'react';
+import axios from 'axios';
+
+const urlChatrooms = 'http://localhost:3001/api/chatrooms';
 
 class Chatroom extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            created: false
+            chatroomId: this.props.match.params.chatroom
         }
     }
 
-    renderCreatingNewChatroom = () => {
-        return (
-            <Button onClick={ () => { this.setState({ created: true }); } }>
-                Create
-            </Button>
-        );
-    }
-
-    renderChatroom = () => {
-        return (
-            <div>chatroom</div>
-        );
+    componentDidMount = () => {
+        axios.get(urlChatrooms + '/' + this.state.chatroomId)
+        .then((res) => {
+            console.log(res.data);
+        })
+        .catch((responseObject) => {
+            console.log('Error. responseObject', responseObject);
+        });
     }
 
     render() { 
-        return ( this.state.created ?
-            this.renderCreatingNewChatroom()
-            :
-            this.renderChatroom()
+        return (
+            <div>
+                new { this.props.match.params.chatroom }
+            </div>
         );
     }
 }
