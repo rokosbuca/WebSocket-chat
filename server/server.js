@@ -5,19 +5,24 @@
 'use strict';
 
 const app = require('express')();
+const bodyParser = require('body-parser');
 const http = require('http').Server(app);
 //const server = require('http').createServer(app);
 //const io = require('socket.io')(server);
 const io = require('socket.io')(http);
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json())
+
 // init controller
 // first, enable access from webapp
 const apiControllerPath = '/api';
 const allowCrossDomain = (req, res, next) => {
-    res.header('Access-Control-Allow-Origin', "*");
+    res.header('Accept', '*');
+    res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
+    return next();
 };
 app.use(apiControllerPath, allowCrossDomain);
 // link controller
