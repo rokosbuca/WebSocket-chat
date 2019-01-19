@@ -63,10 +63,12 @@ const getChatRooms = () => {
         .then((chatroomInfos) => {
             chatroomInfos.forEach((chatroomInfo) => {
                 const chatroom = {};
-                chatroom.name = chatroomInfo.name;
-                chatroom.password = (chatroomInfo.password ? chatroomInfo.password : "");
-                chatroom.createdAt = chatroomInfo.createdAt;
-                chatroom.createdBy = chatroomInfo.createdBy;
+                const chatroomSnippets = chatroomInfo.split(';');
+
+                chatroom.name = chatroomSnippets.name;
+                chatroom.password = (chatroomSnippets.password ? chatroomSnippets.password : "");
+                chatroom.createdAt = chatroomSnippets.createdAt;
+                chatroom.createdBy = chatroomSnippets.createdBy;
 
                 chatrooms.push(chatroom);
             });
@@ -85,12 +87,27 @@ const getChatRooms = () => {
 /**
  * Retrieves chat's room info from redis.
  * 
- * @param {String} chatroom - Chatroom's name.
+ * @param {String} chatroomName - Chatroom's name.
  * 
  * @returns {Object} Chat room info object containing attributes: name, password, createdAt, createdBy.
  */
-const getChatRoomInfo = (chatroom) => {
+const getChatRoomInfo = (chatroomName) => {
+    const chatroom = {};
 
+    clusterClient._hget(map, chatroomName)
+    .then((chatroomInfo) => {
+        const chatroomSnippets = chatroomInfo;
+
+        chatroom.name = chatroomSnippets.name;
+        chatroom.password = (chatroomSnippets.password ? chatroomSnippets.password : "");
+        chatroom.createdAt = chatroomSnippets.createdAt;
+        chatroom.createdBy = chatroomSnippets.createdBy;
+
+        return chatroom;
+    })
+    .catch((error) => {
+        throw error;
+    });
 }
 
 /**
@@ -100,8 +117,14 @@ const getChatRoomInfo = (chatroom) => {
  * 
  * @returns {boolean} True if chatroom with a provided name already exists, false otherwise.
  */
-const chatroomExists = (chatroom) => {
-
+const chatroomExists = (chatroomName) => {
+    clusterClient._hexists(map, chatroomName)
+    .then((exists) => {
+        return exists;
+    })
+    .catch((error) => {
+        throw error;
+    });
 }
 
 /**
