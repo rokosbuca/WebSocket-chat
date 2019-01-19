@@ -143,7 +143,7 @@ const _hexists = (map, field) => {
     return new Promise((resolve, reject) => {
         redisClient.hexistsAsync(map, field)
         .then((exists) => {
-            if (Integer.parseString(exists) === 1) {
+            if (parseInt(exists) === 1) {
                 resolve(true);
             } else {
                 resolve(false);
@@ -167,6 +167,7 @@ redisClient._hgetall = _hgetall;
 redisClient._hdel = _hdel;
 redisClient._hdelall = _hdelall;
 redisClient._hexists = _hexists;
+
 
 module.exports = {
     getClient
