@@ -134,8 +134,8 @@ const chatroomExists = (chatroomName) => {
  * 
  * @returns {boolean} True if chatroom with a provided name already exists, false otherwise.
  */
-const isChatroomNameTaken = (chatroom) => {
-
+const isChatroomNameTaken = (chatroomName) => {
+    return chatroomExists(chatroomName);
 }
 
 /**
