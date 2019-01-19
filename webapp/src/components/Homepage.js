@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
 import { Button, List } from 'antd';
 import axios from 'axios';
 
@@ -70,10 +71,11 @@ class Homepage extends Component {
                 size="default"
                     title="List of Chat Rooms:"
                     header={
-                        <Button onClick={ this.createNewChatroom }
-                        >
-                            Create New Chat Room
-                        </Button>
+                        <Link to={ '/new' }>
+                            <Button>
+                                Create New Chatroom
+                            </Button>
+                        </Link>
                     }
                     bordered={ true }
                     loading={ this.state.loading }
