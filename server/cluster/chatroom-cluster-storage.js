@@ -172,8 +172,16 @@ const checkPassword = (chatroomName, password) => {
  * 
  * @returns {boolean} True if the user has admin privileges, false otherwise. 
  */
-const isUserAdmin = (chatroom, user) => {
+const isUserAdmin = (chatroomName, username) => {
+    clusterClient._hget(map, chatroomName)
+    .then((chatroomInfo) => {
+        if (!chatroomInfo) {
+            // chatroom not found, always return false in that case
+            return false;
+        }
 
+        return chatroomInfo.split(';')[3] === username;
+    })
 }
 
 module.exports = {
