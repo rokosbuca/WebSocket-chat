@@ -80,9 +80,21 @@ const disconnectChatroomUser = (chatroom, user, isAdmin) => {
     });
 }
 
+const getUsers = (chatroom) => {
+    return new Promise((resolve, reject) => {
+        clusterClient._hget(map, chatroom)
+        .then((users) => {
+            resolve(users.split(';'));
+        })
+        .catch((error) => {
+            reject(error);
+        });
+    });
+}
+
 const countUsers = (chatroom) => {
     return new Promise((resolve, reject) => {
-        clusterClient._hget(chatroom)
+        clusterClient._hget(map, chatroom)
         .then((users) => {
             resolve(users.split(';').length);
         })
@@ -144,9 +156,10 @@ const userExists = (chatroom, user) => {
 }
 
 module.exports = {
-    connectChatroomUser,
-    disconnectChatroomUser,
+    getUsers,
+    userExists,
     countUsers,
     countUsersForAllChatrooms,
-    userExists
+    connectChatroomUser,
+    disconnectChatroomUser
 }

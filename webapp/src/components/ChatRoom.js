@@ -30,6 +30,8 @@ class Chatroom extends Component {
         return (
             <div>
                 new { this.props.match.params.chatroom }
+                <br /><br />
+                
             </div>
         );
     }

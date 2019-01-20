@@ -35,7 +35,7 @@ const getMessages = (chatroom) => {
     return new Promise((resolve, reject) => {
         clusterClient._llen(chatroom)
         .then((nMessages) => {
-            clusterClient._lrange(chatroom, 0, intParse(nMessages))
+            clusterClient._lrange(chatroom, 0, nMessages)
             .then((messages) => {
                 resolve(messages);
             })

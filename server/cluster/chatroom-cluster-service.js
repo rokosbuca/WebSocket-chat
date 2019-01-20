@@ -73,6 +73,57 @@ const getChatroomsList = () => {
     });
 }
 
+const getChatroom = (chatroomId) => {
+    return new Promise((resolve, reject) => {
+        // return chatroom as an object containing:
+        //      - chatroom
+        //      - password
+        //      - createdAt
+        //      - createdBy
+        //      - nUsers
+        //      - users
+        //      - nMessages
+        //      - messages
+
+        const chatroomObject = {};
+
+        // 1) get basic chatroom info
+        chatroomInfoStorage.getChatRoomInfo(chatroomId)
+        .then((chatroomInfo) => {
+            chatroomObject.chatroom = chatroomInfo.chatroom;
+            chatroomObject.password = chatroomInfo.password;
+            chatroomObject.createdAt = chatroomInfo.createdAt;
+            chatroomObject.createdBy = chatroomInfo.createdBy;
+            chatroomObject.users = [chatroomInfo.createdBy];
+
+            // 2) get chatroom users
+            chatroomUserStorage.getUsers(chatroomId)
+            .then((users) => {
+                chatroomObject.users = users;
+                chatroomObject.nUsers = users.length;
+
+                // 3) get chatroom messages
+                chatroomMsgStorage.getMessages(chatroomId)
+                .then((messages) => {
+                    chatroomObject.messages = messages;
+                    chatroomObject.nMessages = messages.length;
+
+                    resolve(chatroomObject);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+            })
+            .catch((error) => {
+                reject(error);
+            });
+        })
+        .catch((error) => {
+            reject(error);
+        });
+    });
+}
+
 const createChatroom = (chatroom) => {
     /**
      * chatroom = {
@@ -109,7 +160,9 @@ const createChatroom = (chatroom) => {
     });
 }
 
+
 module.exports = {
     getChatroomsList,
+    getChatroom,
     createChatroom
 }

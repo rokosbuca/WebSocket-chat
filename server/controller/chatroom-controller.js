@@ -10,20 +10,19 @@ const router = require('express').Router();
 // mapping
 const mapping = '/chatrooms/:chatroomId';
 
-// cluster storage
-const chatroomStorage = require('../cluster/chatroom-cluster-storage');
+// chatroom cluster service
+const chatroomService = require('../cluster/chatroom-cluster-service');
 
-const getChatroomInfo = (req, res) => {
-    // get chatroom info
-    chatroomStorage.getChatRoomInfo(req.params.chatroomId)
-    .then((chatroomInfo) => {
-        return res.status(200).json({ chatroom: chatroomInfo });
+const getChatroom = (req, res) => {
+    chatroomService.getChatroom(req.params.chatroomId)
+    .then((chatroom) => {
+        console.log(chatroom);
+        return res.status(200).json({ chatroom: chatroom });
     })
     .catch((error) => {
         console.log('Error while accessing GET api/chatrooms/:chatroomId endpoint. Error message:', error);
         return res.status(500).send('Unxpected server error while fetching info for chatroom ' + req.params.chatroomId);
-    })
-
+    });
 }
 
 const exitChatroom = (req, res) => {
@@ -32,7 +31,7 @@ const exitChatroom = (req, res) => {
 }
 
 router.get(mapping,
-    getChatroomInfo
+    getChatroom
 );
 
 router.delete(mapping,
