@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
+import { Redirect, withRouter, Route } from 'react-router-dom';
 import { Button, Input } from 'antd';
 
 class ChatroomInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            enteredPassword: ''
+            enteredPassword: '',
+            passwordInputPlaceholder: 'Password',
+            redirect: false,
+            redirectLink: ''
         }
         console.log(this.props.chatroom.chatroom + ' PROPS:', this.props.chatroom);
     }
@@ -24,28 +28,62 @@ class ChatroomInfo extends Component {
         } else {
             return (
                 <Input
-                    placeholder="Password"
+                    placeholder={ this.state.passwordInputPlaceholder }
                     size="large"
                     onChange={ this.updateEnteredPassword }
+                    value={ this.state.enteredPassword }
                 />
             );
         }
     }
 
-    joinChatroom = (chatroomId) => {
-        
+    passwordIncorrect = () => {
+        this.setState({
+            enteredPassword: '',
+            passwordInputPlaceholder: 'Incorrect password'
+        });
     }
 
-    render() { 
+    passwordCorrect = () => {
+        this.setState({
+            redirect: true,
+            redirectLink: '/chatrooms/' + this.props.chatroom.chatroom
+        });
+    }
+
+    joinChatroom = (chatroomId) => {
+        this.passwordCorrect();
+    }
+
+    renderJoinButton = withRouter(({ history }) => (
+        <Button
+            onClick={ () => { history.push('/chatrooms/'+this.props.chatroom.chatroom) } }
+        >
+            Join    
+        </Button>
+    ))
+
+    render() {
+        if (this.state.redirect) {
+            console.log('Redirecting to', this.state.redirectLink);
+            return <Redirect to={ this.state.redirectLink } />
+        }
+
         return (
             <div>
                 { this.props.chatroom.chatroom }&emsp;&emsp;
-                <Button onClick={ this.joinChatroom } >
-                    &emsp;Join&emsp;
-                </Button>&emsp;
+                <Route render={({ history }) => (
+                    <Button onClick={ () => { history.push('/chatrooms/'+this.props.chatroom.chatroom)} }>
+                        &emsp;Join&emsp;
+                    </Button>
+                )} />&emsp;
                 { this.renderPassword() }&emsp;&emsp;
-                users: { this.props.chatroom.nUsers }
-                -&emsp;-
+                users:&nbsp;{ this.props.chatroom.nUsers }&emsp;
+                messages:&nbsp;{ this.props.chatroom.nMessages }&emsp;
+                &emsp;
+                &emsp;
+                admin:&nbsp;"{ this.props.chatroom.createdBy }"&emsp;&emsp;
+                [{ this.props.chatroom.createdAt }]
             </div>
         );
     }
