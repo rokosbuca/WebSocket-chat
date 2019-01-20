@@ -18,11 +18,11 @@ const chatroomInitMessage = (chatroom, timestamp, user, password) => {
     return new Promise((resolve, reject) => {
         clusterClient._rpush(chatroom, initMessage)
         .then(() => {
-            const adminConnectedMessage = 'User "' + user + '" connected to chatroom "' + chatroom + '" on ' + new Date().toLocaleString();
+            const adminConnectedMessage = 'User "' + user + '" connected to chatroom "' + chatroom + '" on ' + timestamp;//new Date().toLocaleString();
     
             clusterClient._rpush(chatroom, adminConnectedMessage)
-            .then((listLenght) => {
-                resolve(listLenght)
+            .then(() => {
+                resolve([initMessage, adminConnectedMessage]);
             })
         })
         .catch((error) => {
@@ -31,11 +31,74 @@ const chatroomInitMessage = (chatroom, timestamp, user, password) => {
     });
 }
 
-const newMessage = (chatroom, timestamp, user, message) => {
+const getMessages = (chatroom) => {
+    return new Promise((resolve, reject) => {
+        clusterClient._llen(chatroom)
+        .then((nMessages) => {
+            clusterClient._lrange(chatroom, 0, intParse(nMessages))
+            .then((messages) => {
+                resolve(messages);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+        })
+        .catch((error) => {
+            reject(error);
+        });
+    });
+}
 
+const newMessage = (chatroom, timestamp, user, message) => {
+    const newMessage = '[' + timestamp + '] ' + user + ': ' + message;
+
+    return new Promise((resolve, reject) => {
+        clusterClient._rpush(chatroom, newMessage)
+        .then(() => {
+            resolve(newMessage);
+        })
+        .catch((error) => {
+            reject(error);
+        });
+    });
+}
+
+const userConnectedMessage = (chatroom, timestamp, user) => {
+    const message = 'User "' + user + '" has disconnected from chatroom "' + chatroom + '" on [' + timestamp + ']';
+
+    return new Promise((resolve, reject) => {
+        clusterClient._rpush(chatroom, message)
+        .then(() => {
+            resolve(message);
+        })
+        .catch((error) => {
+            reject(error);
+        });
+    });
+}
+
+const userDisconnectedMessage = (chatroom, timestamp, user, isAdmin) => {
+    const message = (isAdmin ? 'Admin "' : 'User "')
+        + user 
+        + '" has disconnected from chatroom "' 
+        + chatroom + '" on [' + timestamp + ']\n'
+        + 'The chatroom is now closed.';
+
+    return new Promise((resolve, reject) => {
+        clusterClient._rpush(chatroom, message)
+        .then(() => {
+            resolve(message);
+        })
+        .catch((error) => {
+            reject(error);
+        });
+    });
 }
 
 module.exports = {
     chatroomInitMessage,
-    newMessage
+    getMessages,
+    newMessage,
+    userConnectedMessage,
+    userDisconnectedMessage
 }
