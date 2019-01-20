@@ -49,6 +49,18 @@ const getMessages = (chatroom) => {
     });
 }
 
+const countMessages = (chatroom) => {
+    return new Promise((resolve, reject) => {
+        clusterClient._llen(chatroom)
+        .then((nMessages) => {
+            resolve(nMessages);
+        })
+        .catch((error) => {
+            reject(error);
+        });
+    });
+}
+
 const newMessage = (chatroom, timestamp, user, message) => {
     const newMessage = '[' + timestamp + '] ' + user + ': ' + message;
 
@@ -98,6 +110,7 @@ const userDisconnectedMessage = (chatroom, timestamp, user, isAdmin) => {
 module.exports = {
     chatroomInitMessage,
     getMessages,
+    countMessages,
     newMessage,
     userConnectedMessage,
     userDisconnectedMessage
