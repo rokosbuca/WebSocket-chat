@@ -95,6 +95,7 @@ const countUsersForAllChatrooms = () => {
     return new Promise((resolve, reject) => {
         const chatroomNames = [];
         const countUsersPromises = [];
+        const chatroomUserCounts = {};
 
         clusterClient._hkeys(map)
         .then((chatrooms) => {
@@ -105,15 +106,13 @@ const countUsersForAllChatrooms = () => {
 
             Promise.all(countUsersPromises)
             .then((counts) => {
-                const chatroomUserCount = [];
                 for (let i = 0; i < counts.length; i++) {
-                    chatroomUserCount.push({
-                        chatroom: chatroomNames[i],
-                        userCount: counts[i]
-                    });
+                    let chatroomName = chatroomNames[i];
+
+                    chatroomUserCounts.chatroomName = counts[i];
                 }
 
-                resolve(chatroomUserCount);
+                resolve(chatroomUserCounts);
             })
             .catch((error) => {
                 reject(error);
