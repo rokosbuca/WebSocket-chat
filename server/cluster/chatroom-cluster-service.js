@@ -73,6 +73,43 @@ const getChatroomsList = () => {
     });
 }
 
+const createChatroom = (chatroom) => {
+    /**
+     * chatroom = {
+     *      chatroom,
+     *      password
+     *      createdAt,
+     *      createdBy
+     * }
+     */
+
+    return new Promise((resolve, reject) => {
+        // 1) create chatroom info
+        chatroomInfoStorage.createChatRoom(chatroom.chatroom, chatroom.password, chatroom.createdAt, chatroom.createdBy)
+        .then(() => {
+            // 2) connect user with chatroom
+            chatroomUserStorage.connectChatroomUser(chatroom.chatroom, chatroom.createdBy)
+            .then(() => {
+                // 3) save chatroom init messages to chatroom-msg
+                chatroomMsgStorage.chatroomInitMessage(chatroom.chatroom, chatroom.createdAt, chatroom.createdBy, chatroom.password)
+                .then((initMessages) => {
+                    resolve(initMessages);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+            })
+            .catch((error) => {
+                reject(error);
+            });
+        })
+        .catch((error) => {
+            reject(error);
+        });
+    });
+}
+
 module.exports = {
-    getChatroomsList
+    getChatroomsList,
+    createChatroom
 }

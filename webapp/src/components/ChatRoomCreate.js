@@ -60,6 +60,10 @@ class ChatroomCreate extends Component {
             }
             axios.post(urlChatrooms, newChatroom)
             .then((res) => {
+                console.log('Initial chatroom messages:\n\t'
+                    + res.data.chatroom.initMessages[0]
+                    + '\n\t' + res.data.chatroom.initMessages[1]);
+                    
                 const linkChatroom = '/chatrooms/' + res.data.chatroom.chatroom;
                 this.setState({
                     redirect: true,
