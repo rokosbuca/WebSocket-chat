@@ -20,8 +20,10 @@ class Homepage extends Component {
             chatroomList: []
         }
 
-        socket.on('chatroomListUpdated', (evt) => { console.log('detected "chatroomListUpdated event"') });
-        socket.on('chatroomListUpdated', this.handleNewChatroomCreation);
+        socket.on('chatroomListAppended', () => console.log('detected "chatroomListUpdated" event'));
+        socket.on('chatroomListAppended', this.handleNewChatroomCreation);
+        socket.on('chatroomListUpdated', () => console.log('detected "chatroomListUpdated" event'));
+        socket.on('chatroomListUpdated', this.handleChatroomListUpdate);
     }
 
     componentDidMount = () => {
@@ -35,6 +37,12 @@ class Homepage extends Component {
 
         this.setState({
             chatroomList: updatedChatroomList
+        });
+    }
+
+    handleChatroomListUpdate = (chatrooms) => {
+        this.setState({
+            chatroomList: chatrooms
         });
     }
 

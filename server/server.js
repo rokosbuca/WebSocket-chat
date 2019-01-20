@@ -46,24 +46,36 @@ app.get('/', function(req, res){
 
 const ChatroomService = require('./cluster/chatroom-cluster-service');
 
-// socket handlers 1, 2 and 3
+// Homepage specific socket handlers 1 and 2
 //
-// Handles updates regarding list of chatrooms, as displayed to the users on the homepage
+// Handles updates regarding list of chatrooms, as displayed to the users on the homepage.
 // 1) creating new channel
 io.on('connection', (client) => {
     client.on('newChatroomCreated', (chatroomId) => {
-        console.log('Chatroom "' + chatroomId + '" was created.');
+        console.log('Chatroom "' + chatroomId + '" was created. Updating Homepage...');
         ChatroomService.getChatroom(chatroomId)
         .then((chatroomObject) => {
-            io.emit('chatroomListUpdated', chatroomObject);
+            io.emit('chatroomListAppended', chatroomObject);
         })
         .catch((error) => {
             console.log('Error while getting chatroom ' + chatroomId + '. Error message:', error);
         });
     });
 });
-// 2) new user connected to chatroom
-// 3) new message was sent in a chatroom
+// 2) new user connected to chatroom or a new message was send in a chatroom
+// temp solution, cluster service necessary for updating a single chatroom item on the homepage already exists
+io.on('connection', (client) => {
+    client.on('updateHomepage', (chatroomId) => {
+        ChatroomService.getChatroomsList()
+        .then((chatrooms) => {
+            console.log('Chatroom "' + chatroomId + '" updated. Updating Homepage...');
+            io.emit('chatroomListUpdated', chatrooms);
+        })
+        .catch((error) => {
+            console.log('Error while getting chatrooms. Error message:', error);
+        });
+    });
+});
 
 io.on('connection', (client) => {
     client.on('subscribeToTimer', (interval) => {
