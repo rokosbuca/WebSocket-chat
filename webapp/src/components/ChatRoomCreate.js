@@ -58,7 +58,6 @@ class ChatroomCreate extends Component {
                     createdBy: this.state.user
                 }
             }
-            console.log(newChatroom);
             axios.post(urlChatrooms, newChatroom)
             .then((res) => {
                 console.log('Initial chatroom messages:\n\t'
@@ -90,7 +89,6 @@ class ChatroomCreate extends Component {
         this.setState({
             password: e.target.value
         });
-        console.log(this.state.password);
     }
 
     updateUser = (e) => {

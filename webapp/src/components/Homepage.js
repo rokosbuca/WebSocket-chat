@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Button, List } from 'antd';
 import axios from 'axios';
 
-import ChatRoomInfo from './ChatroomInfo';
+import ChatroomInfo from './ChatroomInfo';
 
 const urlChatrooms = 'http://localhost:3001/api/chatrooms';
 
@@ -42,7 +42,7 @@ class Homepage extends Component {
         .then((res) => {
             this.setState({
                 loading: false,
-                chatroomList: this.parseChatroomList(res.data.chatrooms)
+                chatroomList: res.data.chatrooms
             });
         })
         .catch((responseObject) => {
@@ -52,30 +52,6 @@ class Homepage extends Component {
                 chatroomList: []
             });
         });
-    }
-
-    createNewChatroom = () => {
-        const chatroom = {
-            chatroom: "ch2",
-            password: "",
-            createdAt: "21:07:13",
-            createdBy: "mega admin"
-        }
-        axios.post(urlChatrooms, { chatroom })
-        .then((res) => {
-            console.log(res);
-            this.addChatroomToList('new chatroom'/*res.data.chatroom.chatroom*/);
-        })
-        .catch((responseObject) => {
-            console.log('Error. Response object:', responseObject);
-        })
-    }
-
-    addChatroomToList = (chatroom) => {
-        const newChatroomList = this.state.chatroomList;
-        newChatroomList.push(chatroom);
-
-        this.setState({ chatroomList: newChatroomList });
     }
 
     render() { 
@@ -97,7 +73,7 @@ class Homepage extends Component {
                     bordered={ true }
                     loading={ this.state.loading }
                     dataSource={ this.state.chatroomList }
-                    renderItem={ item => (<List.Item>{item}</List.Item>) }
+                    renderItem={ item => (<List.Item><ChatroomInfo chatroom={ item }/></List.Item>) }
                 />
             </div>
         );
