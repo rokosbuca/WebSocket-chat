@@ -10,7 +10,7 @@ const router = require('express').Router();
 // mapping
 const mapping = '/chatrooms';
 
-// cluster service
+// chatroom cluster service
 const chatroomService = require('../cluster/chatroom-cluster-service');
 
 const getChatroomList = (req, res) => {
