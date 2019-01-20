@@ -2,10 +2,15 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { Button, List } from 'antd';
 import axios from 'axios';
+import openSocket from 'socket.io-client';
 
 import ChatroomInfo from './ChatroomInfo';
 
+// resh api endpoint
 const urlChatrooms = 'http://localhost:3001/api/chatrooms';
+
+// socket
+const socket = openSocket('http://localhost:3001');
 
 class Homepage extends Component {
     constructor(props) {
@@ -14,10 +19,23 @@ class Homepage extends Component {
             loading: true,
             chatroomList: []
         }
+
+        socket.on('chatroomListUpdated', (evt) => { console.log('detected "chatroomListUpdated event"') });
+        socket.on('chatroomListUpdated', this.handleNewChatroomCreation);
     }
 
     componentDidMount = () => {
         this.getChatrooms();
+    }
+
+    handleNewChatroomCreation = (chatroom) => {
+        console.log('Chatroom "' + chatroom.chatroom + '" was created.');
+        const updatedChatroomList = this.state.chatroomList;
+        updatedChatroomList.push(chatroom);
+
+        this.setState({
+            chatroomList: updatedChatroomList
+        });
     }
 
     parseChatroomList = (chatrooms) => {
@@ -61,7 +79,7 @@ class Homepage extends Component {
                 <br /><br />
                 <h3>List of Chat Rooms:</h3>
                 <List
-                size="default"
+                    size="default"
                     title="List of Chat Rooms:"
                     header={
                         <Link to={ '/new' }>

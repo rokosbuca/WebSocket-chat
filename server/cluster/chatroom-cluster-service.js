@@ -160,6 +160,16 @@ const createChatroom = (chatroom) => {
     });
 }
 
+const userConnected = (chatroom, chatroomId) => {
+    // returns a message that was created when a new user connected
+
+}
+
+const userDisconnected = (chatroom, chatroomId) => {
+    // returns a message that was created when an user disconnected
+
+}
+
 
 module.exports = {
     getChatroomsList,

@@ -19,7 +19,6 @@ const connectChatroomUser = (chatroom, user) => {
     return new Promise((resolve, reject) => {
         clusterClient._hget(map, chatroom)
         .then((users) => {
-            console.log('users:', users);
             const newUsersString = (users !== null ? users + ';' + user : user);
             clusterClient._hset(map, chatroom, newUsersString)
             .then(() => {

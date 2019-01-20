@@ -2,8 +2,13 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Input, Button } from 'antd';
 import axios from 'axios';
+import openSocket from 'socket.io-client';
 
+// resh api endpoint
 const urlChatrooms = 'http://localhost:3001/api/chatrooms';
+
+// socket
+const socket = openSocket('http://localhost:3001');
 
 class ChatroomCreate extends Component {
     constructor(props) {
@@ -69,6 +74,12 @@ class ChatroomCreate extends Component {
                     redirect: true,
                     newChatroomRedirect: linkChatroom
                 });
+
+                // new chatroom was created
+                // notify all users watching the homepage
+                // send chatroom's id (chatroom's name) to server
+                console.log('Emitting ' + res.data.chatroom.chatroom);
+                socket.emit('newChatroomCreated', res.data.chatroom.chatroom);
             })
             .catch((responseObject) => {
                 console.log('Error. Response object:', responseObject);

@@ -16,13 +16,16 @@ const chatroomService = require('../cluster/chatroom-cluster-service');
 const getChatroom = (req, res) => {
     chatroomService.getChatroom(req.params.chatroomId)
     .then((chatroom) => {
-        console.log(chatroom);
         return res.status(200).json({ chatroom: chatroom });
     })
     .catch((error) => {
         console.log('Error while accessing GET api/chatrooms/:chatroomId endpoint. Error message:', error);
         return res.status(500).send('Unxpected server error while fetching info for chatroom ' + req.params.chatroomId);
     });
+}
+
+const newUser = (req, res) => {
+
 }
 
 const exitChatroom = (req, res) => {
@@ -32,6 +35,10 @@ const exitChatroom = (req, res) => {
 
 router.get(mapping,
     getChatroom
+);
+
+router.post(mapping,
+    newUser
 );
 
 router.delete(mapping,
