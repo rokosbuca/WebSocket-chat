@@ -24,7 +24,13 @@ class Homepage extends Component {
         const chatroomList = [];
 
         chatrooms.forEach((chatroom) => {
-            const chatroomString = chatroom.chatroom + ';' + chatroom.password + ';' + chatroom.createdAt + ';' + chatroom.createdBy;
+            const chatroomString = chatroom.chatroom 
+                + ':\tpassword: ' + chatroom.password
+                + '\tusers: ' + chatroom.nUsers
+                + '\tmessages: ' + chatroom.nMessages
+                + '\tadmin: ' + chatroom.createdBy
+                + '\tcreated: [' + chatroom.createdAt + ']';
+
             chatroomList.push(chatroomString);
         });
 

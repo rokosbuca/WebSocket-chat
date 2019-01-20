@@ -14,24 +14,13 @@ const mapping = '/chatrooms';
 const chatroomStorage = require('../cluster/chatroom-cluster-storage');
 const chatroomMessageStorage = require('../cluster/chatroom-msg-cluster-storage');
 
+// cluster service
+const chatroomService = require('../cluster/chatroom-cluster-service');
+
 const getChatRoomList = (req, res) => {
-    const chatroomList = [];
-
-    chatroomStorage.getChatRooms()
+    chatroomService.getChatroomsList()
     .then((chatrooms) => {
-        /**
-         * chatroom = {
-         *      chatroom
-         *      password
-         *      createdAt
-         *      createdBy
-         * }
-         */
-        chatrooms.forEach((chatroom) => {
-            chatroomList.push(chatroom);
-        });
-
-        return res.status(200).json({ 'chatrooms': chatroomList });
+        return res.status(200).json({ chatrooms: chatrooms });
     })
     .catch((error) => {
         console.log('Error while accessing GET api/chatrooms. Error message:', error);
