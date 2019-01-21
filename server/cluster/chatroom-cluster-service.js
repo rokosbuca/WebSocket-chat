@@ -182,9 +182,39 @@ const userConnected = (chatroomId, userId) => {
     });
 }
 
-const userDisconnected = (chatroom, chatroomId) => {
+const userDisconnected = (chatroomId, userId) => {
     // returns a message that was created when an user disconnected
+    const timestamp = new Date();
 
+    return new Promise((resolve, reject) => {
+        chatroomInfoStorage.getChatRoomInfo(chatroomId)
+        .then((chatroomInfo) => {
+            let isAdmin = false;
+            if (chatroomInfo.createdBy === userId) {
+                isAdmin = true;
+            }
+
+            chatroomUserStorage.disconnectChatroomUser(chatroomId, userId, isAdmin)
+            .then(() => {
+                chatroomMsgStorage.userDisconnectedMessage(chatroomId, timestamp.toLocaleDateString(), userId, isAdmin)
+                .then((message) => {
+                    resolve(message);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    reject(error); 
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+                reject(error); 
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+            reject(error); 
+        });
+    });
 }
 
 
@@ -192,5 +222,6 @@ module.exports = {
     getChatroomsList,
     getChatroom,
     createChatroom,
-    userConnected
+    userConnected,
+    userDisconnected
 }

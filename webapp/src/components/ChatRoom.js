@@ -4,6 +4,7 @@
  */
 
 import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
 import { List, Input, Button } from 'antd';
 import axios from 'axios';
 
@@ -12,12 +13,14 @@ import openSocket from 'socket.io-client';
 const  socket = openSocket('http://localhost:3001');
 
 const urlChatrooms = 'http://localhost:3001/api/chatrooms';
+const urlChatroom = 'http://localhost:3001/api/chatrooms/';
 
 class Chatroom extends Component {
     constructor(props) {
         super(props);
         this.state = {
             chatroomId: this.props.match.params.chatroom,
+            userId: this.props.match.params.user,
             chatroomData: {},
             timestamp: 'no timestamp yet',
             message: ''
@@ -39,7 +42,7 @@ class Chatroom extends Component {
                 chatroomData: res.data.chatroom
             });
 
-            socket.emit('user connected to chatroom', { userId: 'uusseerr', chatroomId: 'cchhaattrroooomm' });
+            socket.emit('user connected to chatroom', { userId: this.state.user, chatroomId: this.state.chatroomId });
         })
         .catch((responseObject) => {
             console.log('Error. responseObject', responseObject);
@@ -60,6 +63,18 @@ class Chatroom extends Component {
                 <Button>
                     Disconnect
                 </Button>&emsp;
+                <Route render={({ history }) => (
+                    <Button
+                        onClick={ () => {
+                            history.push('/');
+                            // handle disconnect
+                            axios.delete();
+                            }
+                        }
+                    >
+                        &emsp;Disconnect&emsp;
+                    </Button>
+                )} />&emsp;
                 <Input
                     placeholder="Message"
                     size="large"

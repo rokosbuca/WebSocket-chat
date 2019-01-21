@@ -13,7 +13,7 @@ class App extends Component {
                 <Route exact path='/' component={ Homepage } />
                 <Route exact path='/new' component={ ChatroomCreate } />
                 <Route exact path='/join/:chatroom' component={ ChatroomJoin } />
-                <Route exact path='/chatrooms/:chatroom' component={ Chatroom } />
+                <Route exact path='/chatrooms/:chatroom/:user' component={ Chatroom } />
             </Switch>
         );
     }

@@ -69,7 +69,7 @@ class ChatroomCreate extends Component {
                     + res.data.chatroom.initMessages[0]
                     + '\n\t' + res.data.chatroom.initMessages[1]);
                     
-                const linkChatroom = '/chatrooms/' + res.data.chatroom.chatroom;
+                const linkChatroom = '/chatrooms/' + res.data.chatroom.chatroom + '/' + this.state.user;
                 this.setState({
                     redirect: true,
                     newChatroomRedirect: linkChatroom

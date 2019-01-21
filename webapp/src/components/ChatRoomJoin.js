@@ -70,7 +70,7 @@ class ChatroomJoin extends Component {
             
             axios.post(urlChatroom + this.state.chatroom, joinChatroomData)
             .then((res) => {
-                const linkChatroom = '/chatrooms/' + this.state.chatroom;
+                const linkChatroom = '/chatrooms/' + this.state.chatroom + '/' + this.state.user;
                 this.setState({
                     redirect: true,
                     joinChatroomRedirect: linkChatroom
