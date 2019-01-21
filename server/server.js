@@ -68,12 +68,29 @@ io.on('connection', (client) => {
     });
 });
 
+// timer dedicated listener
+// for keeping the track of the server time among all users, all across the world
 io.on('connection', (client) => {
     client.on('subscribeToTimer', (interval) => {
         console.log('client is subscribing to timer with interval', interval);
         setInterval(() => {
             client.emit('timer', new Date());
         }, interval);
+    });
+});
+
+// update messages in chatroom event
+// notifies the server that the new message has been created
+// emit new message history to a chatroom
+io.on('connection', (client) => {
+    client.on('update messages in chatroom', (chatroom) => {
+        ChatroomService.getChatroom(chatroom.chatroom)
+        .then((chatroomData) => {
+            io.emit('update messages in chatroom ' + chatroomData.chatroom, chatroomData.messages);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     });
 });
   

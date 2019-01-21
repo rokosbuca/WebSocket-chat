@@ -31,6 +31,17 @@ class Chatroom extends Component {
                 timestamp: timestamp
             });
         });
+
+        socket.on('update messages in chatroom ' + this.state.chatroomId, this.handleMessagesUpdate);
+    }
+
+    handleMessagesUpdate = (messages) => {
+        const chatroomData = {};
+        chatroomData.messages = messages;
+
+        this.setState({
+            chatroomData: chatroomData
+        });
     }
 
     componentDidMount = () => {
@@ -60,9 +71,6 @@ class Chatroom extends Component {
             <div>
                 <h1>Chatroom { this.props.match.params.chatroom }</h1>
                 <br />
-                <Button>
-                    Disconnect
-                </Button>&emsp;
                 <Route render={({ history }) => (
                     <Button
                         onClick={ () => {

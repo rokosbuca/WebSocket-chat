@@ -81,6 +81,14 @@ class ChatroomJoin extends Component {
                 socket.emit('new message in chatroom', this.state.chatroom);
                 // 2) notify homepage to update itself
                 socket.emit('update homepage', this.state.chatroom);
+                // 3) notify chatroom to update messages
+                const chatroomNotifyData = {
+                    chatroom: {
+                        chatroom: this.state.chatroom,
+                        user: this.state.user
+                    }
+                }
+                socket.emit('update messages in chatroom ' + this.state.chatroom, chatroomNotifyData);
             })
             .catch((responseObject) => {
                 console.log('Error. Response object:', responseObject);
