@@ -64,6 +64,35 @@ class Chatroom extends Component {
         });
     }
 
+    handleSend = () => {
+        // 1) send new message to be saved
+        const newMessageData = {
+            chatroom: {
+                chatroom: this.state.chatroomId,
+                user: this.state.userId,
+                message: this.state.message   
+            }
+        }
+        axios.put(urlChatroom + this.state.chatroomId, newMessageData)
+        .then((res) => {
+            console.log('Sent message:', this.state.message);
+            // 2) notify homepage to update itself
+            socket.emit('update homepage', this.state.chatroomId);
+            // 3) notify chatroom to update messages
+            socket.emit('update messages in chatroom', { chatroom: this.state.chatroomId, user:this.state.userId });
+
+            // reset input field
+            /*
+            this.setState({
+                message: ''
+            });
+            */
+        })
+        .catch((responseObject) => {
+            console.log('Error. responseObject', responseObject);
+        });
+    }
+
     render() { 
         return (
             <div>
@@ -103,7 +132,7 @@ class Chatroom extends Component {
                     size="large"
                     onChange={ this.updateMessage }
                 />&nbsp;
-                <Button>
+                <Button onClick={ this.handleSend }>
                     Send
                 </Button>
                 <br /><br />

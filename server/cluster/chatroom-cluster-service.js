@@ -218,11 +218,28 @@ const userDisconnected = (chatroomId, userId) => {
     });
 }
 
+const addMessage = (chatroom, user, message) => {
+    // returns a message that was created by user
+    const timestamp = new Date();
+
+    return new Promise((resolve, reject) => {
+        chatroomMsgStorage.newMessage(chatroom, timestamp.toLocaleDateString(), user, message)
+        .then((newMessage) => {
+            resolve(newMessage);
+        })
+        .catch((error) => {
+            console.log(error);
+            reject(error); 
+        });
+    })   
+}
+
 
 module.exports = {
     getChatroomsList,
     getChatroom,
     createChatroom,
     userConnected,
-    userDisconnected
+    userDisconnected,
+    addMessage
 }
