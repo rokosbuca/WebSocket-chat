@@ -33,7 +33,7 @@ const connectUser = (req, res) => {
      */
 
     chatroomService.userConnected(req.body.chatroom.chatroom, req.body.chatroom.user)
-    .then(() => {
+    .then((message) => {
         res.status(200).send();
     })
     .catch((error) => {
@@ -45,6 +45,15 @@ const connectUser = (req, res) => {
 const disconnectUser = (req, res) => {
     // exit chatroom
     // delete chatroom if the admin is the one who is exit
+
+    chatroomService.userDisconnected(req.body.chatroom.chatroom, req.body.chatroom.user)
+    .then((message) => {
+        res.status(200).send();
+    })
+    .catch((error) => {
+        console.log('ERROR DELETE api/chatrooms/' + req.body.chatroom.chatroom + ' Error message:', error);
+        return res.status(500).send();
+    })
 }
 
 router.get(mapping,

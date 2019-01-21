@@ -66,9 +66,24 @@ class Chatroom extends Component {
                 <Route render={({ history }) => (
                     <Button
                         onClick={ () => {
-                            history.push('/');
-                            // handle disconnect
-                            axios.delete();
+                                // handle disconnect
+                                const disconnectData = {
+                                    chatroom: {
+                                        chatroom: this.state.chatroomId,
+                                        user: this.state.userId
+                                    }
+                                }
+                                axios.delete(urlChatroom + this.state.chatroomId, disconnectData)
+                                .then(() => {
+                                    // 1) notify chatroom via websocket
+                                    socket.emit('new message in chatroom', this.state.chatroom);
+                                    // 2) notify homepage to update itself
+                                    socket.emit('update homepage', this.state.chatroom);
+                                    history.push('/');
+                                })
+                                .catch((responseObject) => {
+                                    console.log('Error while disconnection. reponseObject:', responseObject);
+                                });
                             }
                         }
                     >

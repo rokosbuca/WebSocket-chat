@@ -162,11 +162,12 @@ const createChatroom = (chatroom) => {
 
 const userConnected = (chatroomId, userId) => {
     // returns a message that was created when a new user connected
+    const timestamp = new Date();
 
     return new Promise((resolve, reject) => {
         chatroomUserStorage.connectChatroomUser(chatroomId, userId)
         .then(() => {
-            chatroomMsgStorage.userConnectedMessage(chatroomId, new Date().toDateString, userId)
+            chatroomMsgStorage.userConnectedMessage(chatroomId, timestamp.toLocaleDateString(), userId)
             .then((message) => {
                 resolve(message);
             })
