@@ -76,7 +76,7 @@ const newMessage = (chatroom, timestamp, user, message) => {
 }
 
 const userConnectedMessage = (chatroom, timestamp, user) => {
-    const message = 'User "' + user + '" has disconnected from chatroom "' + chatroom + '" on [' + timestamp + ']';
+    const message = 'User "' + user + '" has connected to chatroom "' + chatroom + '" on [' + timestamp + ']';
 
     return new Promise((resolve, reject) => {
         clusterClient._rpush(chatroom, message)

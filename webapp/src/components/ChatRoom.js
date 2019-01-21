@@ -35,10 +35,7 @@ class Chatroom extends Component {
         socket.on('update messages in chatroom ' + this.state.chatroomId, this.handleMessagesUpdate);
     }
 
-    handleMessagesUpdate = (messages) => {
-        const chatroomData = {};
-        chatroomData.messages = messages;
-
+    handleMessagesUpdate = (chatroomData) => {
         this.setState({
             chatroomData: chatroomData
         });
@@ -54,6 +51,7 @@ class Chatroom extends Component {
             });
 
             socket.emit('user connected to chatroom', { userId: this.state.user, chatroomId: this.state.chatroomId });
+            socket.emit('update messages in chatroom', { chatroom: this.state.chatroomId, user:this.state.userId });
         })
         .catch((responseObject) => {
             console.log('Error. responseObject', responseObject);
@@ -88,6 +86,8 @@ class Chatroom extends Component {
                                     // 2) notify homepage to update itself
                                     socket.emit('update homepage', this.state.chatroom);
                                     history.push('/');
+                                    // 3) update chatroom messages for everybody
+                                    socket.emit('update messages in chatroom', { chatroom: this.state.chatroomId, user:this.state.userId });
                                 })
                                 .catch((responseObject) => {
                                     console.log('Error while disconnection. reponseObject:', responseObject);

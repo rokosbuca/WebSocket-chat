@@ -28,13 +28,6 @@ app.use(apiControllerPath, allowCrossDomain);
 // link controller
 const apiController = require('./controller/routes')(apiControllerPath, app);
 
-// init sockets
-io.on('connection', (client) => {
-    client.on('user connected to chatroom', (uac) => {
-        console.log('user ' + uac.userId + ' connected to chatroom ' + uac.chatroomId);
-    });
-});
-
 const ChatroomService = require('./cluster/chatroom-cluster-service');
 
 // Homepage specific socket handlers 1 and 2
@@ -86,31 +79,13 @@ io.on('connection', (client) => {
     client.on('update messages in chatroom', (chatroom) => {
         ChatroomService.getChatroom(chatroom.chatroom)
         .then((chatroomData) => {
-            io.emit('update messages in chatroom ' + chatroomData.chatroom, chatroomData.messages);
+            io.emit('update messages in chatroom ' + chatroomData.chatroom, chatroomData);
         })
         .catch((error) => {
             console.log(error);
         });
     });
 });
-  
-io.on('connection', (socket) => {
-    console.log('a user connected');
-    socket.on('disconnect', () => {
-      console.log('user disconnected');
-    });
-});
 
-io.on('connection', (socket) => {
-    socket.on('chat message', (msg) => {
-        console.log('message: ' + msg);
-    });
-});
 
-io.on('connection', function(socket){
-    socket.on('chat message', function(msg){
-        io.emit('chat message', msg);
-    });
-});
-  
 http.listen(3001, () => { console.log('server is listening on port 3001'); });

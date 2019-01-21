@@ -78,8 +78,7 @@ class ChatroomCreate extends Component {
                 // new chatroom was created
                 // notify all users watching the homepage
                 // send chatroom's id (chatroom's name) to server
-                console.log('Emitting ' + res.data.chatroom.chatroom);
-                socket.emit('newChatroomCreated', res.data.chatroom.chatroom);
+                socket.emit('new chatroom created', res.data.chatroom.chatroom);
             })
             .catch((responseObject) => {
                 console.log('Error. Response object:', responseObject);

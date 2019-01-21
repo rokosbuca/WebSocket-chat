@@ -32,8 +32,11 @@ const connectUser = (req, res) => {
      * }
      */
 
+    console.log('POST api/charooms/' + req.body.chatroom.chatroom);
+    console.log('recieved data', req.body.chatroom);
     chatroomService.userConnected(req.body.chatroom.chatroom, req.body.chatroom.user)
     .then((message) => {
+        console.log('User ' + req.body.chatroom.user + ' connected. Generated message:\n\t' + message);
         res.status(200).send();
     })
     .catch((error) => {
