@@ -100,6 +100,7 @@ class Chatroom extends Component {
                 <br />
                 <Route render={({ history }) => (
                     <Button
+                        disabled={ true }
                         onClick={ () => {
                                 // handle disconnect
                                 const disconnectData = {
