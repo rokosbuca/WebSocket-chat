@@ -108,7 +108,7 @@ class ChatroomInfo extends Component {
                     </Button>
                 )} />&emsp;
                 { this.renderPassword() }&emsp;&emsp;
-                users:&nbsp;{ this.props.chatroom.nUsers }&emsp;
+                {/*}users:&nbsp;{ this.props.chatroom.nUsers }&emsp;{*/}
                 messages:&nbsp;{ this.props.chatroom.nMessages }&emsp;
                 &emsp;
                 &emsp;
