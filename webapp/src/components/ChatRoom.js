@@ -4,7 +4,7 @@
  */
 
 import React, { Component } from 'react';
-import { List } from 'antd';
+import { List, Input, Button } from 'antd';
 import axios from 'axios';
 
 import { subscribeToTimer } from '../socket/timer';
@@ -19,7 +19,8 @@ class Chatroom extends Component {
         this.state = {
             chatroomId: this.props.match.params.chatroom,
             chatroomData: {},
-            timestamp: 'no timestamp yet'
+            timestamp: 'no timestamp yet',
+            message: ''
         }
 
         subscribeToTimer((err, timestamp) => {
@@ -45,15 +46,33 @@ class Chatroom extends Component {
         });
     }
 
+    updateMessage = (e) => {
+        this.setState({
+            message: e.target.value
+        });
+    }
+
     render() { 
         return (
             <div>
-                new { this.props.match.params.chatroom }
+                <h1>Chatroom { this.props.match.params.chatroom }</h1>
+                <br />
+                <Button>
+                    Disconnect
+                </Button>&emsp;
+                <Input
+                    placeholder="Message"
+                    size="large"
+                    onChange={ this.updateMessage }
+                />&nbsp;
+                <Button>
+                    Send
+                </Button>
                 <br /><br />
                 <List
                     size="default"
                     title="List of Chat Rooms:"
-                    header={ this.state.timestamp }
+                    header={ 'server time: ' + this.state.timestamp }
                     bordered={ true }
                     loading={ this.state.loading }
                     dataSource={ this.state.chatroomData.messages }

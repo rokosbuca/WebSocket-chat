@@ -160,9 +160,26 @@ const createChatroom = (chatroom) => {
     });
 }
 
-const userConnected = (chatroom, chatroomId) => {
+const userConnected = (chatroomId, userId) => {
     // returns a message that was created when a new user connected
 
+    return new Promise((resolve, reject) => {
+        chatroomUserStorage.connectChatroomUser(chatroomId, userId)
+        .then(() => {
+            chatroomMsgStorage.userConnectedMessage(chatroomId, new Date().toDateString, userId)
+            .then((message) => {
+                resolve(message);
+            })
+            .catch((error) => {
+                console.log(error);
+                reject(error); 
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+            reject(error); 
+        });
+    });
 }
 
 const userDisconnected = (chatroom, chatroomId) => {
@@ -174,5 +191,6 @@ const userDisconnected = (chatroom, chatroomId) => {
 module.exports = {
     getChatroomsList,
     getChatroom,
-    createChatroom
+    createChatroom,
+    userConnected
 }

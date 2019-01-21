@@ -24,13 +24,27 @@ const getChatroom = (req, res) => {
     });
 }
 
-const newUser = (req, res) => {
+const connectUser = (req, res) => {
+    /** 
+     * req.body.joinChatroomData = {
+     *     - chatroom
+     *     - user
+     * }
+     */
 
+    chatroomService.userConnected(req.body.chatroom.chatroom, req.body.chatroom.user)
+    .then(() => {
+        res.status(200).send();
+    })
+    .catch((error) => {
+        console.log('ERROR POST api/chatrooms/' + req.body.chatroom.chatroom + ' Error message:', error);
+        return res.status(500).send();
+    })
 }
 
-const exitChatroom = (req, res) => {
+const disconnectUser = (req, res) => {
     // exit chatroom
-    // delete chatroom if the admin is the one to exit
+    // delete chatroom if the admin is the one who is exit
 }
 
 router.get(mapping,
@@ -38,11 +52,11 @@ router.get(mapping,
 );
 
 router.post(mapping,
-    newUser
+    connectUser
 );
 
 router.delete(mapping,
-    exitChatroom
+    disconnectUser
 );
 
 

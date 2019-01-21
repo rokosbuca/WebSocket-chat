@@ -24,6 +24,7 @@ class Homepage extends Component {
         socket.on('chatroomListAppended', this.handleNewChatroomCreation);
         socket.on('chatroomListUpdated', () => console.log('detected "chatroomListUpdated" event'));
         socket.on('chatroomListUpdated', this.handleChatroomListUpdate);
+        //socket.on('update homepage', this.handleChatroomListUpdate);
     }
 
     componentDidMount = () => {

@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 import { Redirect, withRouter, Route } from 'react-router-dom';
 import { Button, Input } from 'antd';
+import axios from 'axios';
+import openSocket from 'socket.io-client';
+
+// resh api endpoint
+const urlChatrooms = 'http://localhost:3001/api/chatrooms';
+
+// socket
+const socket = openSocket('http://localhost:3001');
 
 class ChatroomInfo extends Component {
     constructor(props) {
@@ -8,6 +16,7 @@ class ChatroomInfo extends Component {
         this.state = {
             enteredPassword: '',
             passwordInputPlaceholder: 'Password',
+            passwordCorrect: this.props.chatroom.password === '',
             redirect: false,
             redirectLink: ''
         }
@@ -16,7 +25,8 @@ class ChatroomInfo extends Component {
 
     updateEnteredPassword = (e) => {
         this.setState({
-            enteredPassword: e.target.value
+            enteredPassword: e.target.value,
+            passwordCorrect: e.target.value === this.props.chatroom.password
         });
     }
 
@@ -37,27 +47,45 @@ class ChatroomInfo extends Component {
         }
     }
 
-    passwordIncorrect = () => {
-        this.setState({
-            enteredPassword: '',
-            passwordInputPlaceholder: 'Incorrect password'
+    isPasswordCorrect = () => {
+        return new Promise((resolve, reject) => {
+            axios.get(urlChatrooms + '/' + this.props.chatroom.chatroom)
+            .then((res) => {
+                if (res.data.chatroom.password === '') {
+                    resolve(true);
+                } if (this.state.enteredPassword === res.data.chatroom.password) {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+            })
+            .catch((responseObject) => {
+                console.log('Error while calling GET api/chatrooms/' + this.props.chatroom.chatroom);
+                reject(responseObject);
+            });
         });
     }
 
-    passwordCorrect = () => {
-        this.setState({
-            redirect: true,
-            redirectLink: '/chatrooms/' + this.props.chatroom.chatroom
-        });
-    }
-
-    joinChatroom = (chatroomId) => {
-        this.passwordCorrect();
+    tryJoinChatroom = (chatroomId) => {
+        this.isPasswordCorrect()
+        .then((passwordCorrect) => {
+            if (passwordCorrect) {
+                
+            } else {
+                this.setState({
+                    enteredPassword: '',
+                    passwordInputPlaceholder: 'Wrong Password'
+                });
+            }
+        })
+        .catch((error) => {
+            console.log('Error while checking if the password was correct. Error message:', error);
+        })
     }
 
     renderJoinButton = withRouter(({ history }) => (
         <Button
-            onClick={ () => { history.push('/chatrooms/'+this.props.chatroom.chatroom) } }
+            onClick={ () => { history.push('/join/' + this.props.chatroom.chatroom) } }
         >
             Join    
         </Button>
@@ -73,7 +101,9 @@ class ChatroomInfo extends Component {
             <div>
                 { this.props.chatroom.chatroom }&emsp;&emsp;
                 <Route render={({ history }) => (
-                    <Button onClick={ () => { history.push('/chatrooms/'+this.props.chatroom.chatroom)} }>
+                    <Button
+                        disabled={ !this.state.passwordCorrect }
+                        onClick={ () => { history.push('/join/' + this.props.chatroom.chatroom) } }>
                         &emsp;Join&emsp;
                     </Button>
                 )} />&emsp;

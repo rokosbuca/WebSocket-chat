@@ -35,15 +35,6 @@ io.on('connection', (client) => {
     });
 });
 
-//io.on('connection', client => { console.log('client:', typeof(client), client); console.log('got a connection'); });
-//io.listen(3000);
-
-/*
-app.get('/', function(req, res){
-    res.sendFile(__dirname + '/index.html');
-});
-*/
-
 const ChatroomService = require('./cluster/chatroom-cluster-service');
 
 // Homepage specific socket handlers 1 and 2
@@ -51,7 +42,7 @@ const ChatroomService = require('./cluster/chatroom-cluster-service');
 // Handles updates regarding list of chatrooms, as displayed to the users on the homepage.
 // 1) creating new channel
 io.on('connection', (client) => {
-    client.on('newChatroomCreated', (chatroomId) => {
+    client.on('new chatroom created', (chatroomId) => {
         console.log('Chatroom "' + chatroomId + '" was created. Updating Homepage...');
         ChatroomService.getChatroom(chatroomId)
         .then((chatroomObject) => {
@@ -65,7 +56,7 @@ io.on('connection', (client) => {
 // 2) new user connected to chatroom or a new message was send in a chatroom
 // temp solution, cluster service necessary for updating a single chatroom item on the homepage already exists
 io.on('connection', (client) => {
-    client.on('updateHomepage', (chatroomId) => {
+    client.on('update homepage', (chatroomId) => {
         ChatroomService.getChatroomsList()
         .then((chatrooms) => {
             console.log('Chatroom "' + chatroomId + '" updated. Updating Homepage...');
